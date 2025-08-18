@@ -208,3 +208,6 @@ __marimo__/
 
 # temporary files and folders
 temp
+
+# output folders
+vector_db
