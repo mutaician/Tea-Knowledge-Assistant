@@ -12,7 +12,8 @@ rag_assistant_prompt:
     The documents come from sources such as Wikipedia and the Tea Board of Kenya, covering tea cultivation, processing, and regulations.
   output_constraints:
     - Answer ONLY from the provided documents.
-    - If the question is unrelated to tea or cannot be answered from the documents,
+    - | 
+      If the question is unrelated to tea or cannot be answered from the documents,
       reply: "The question is not answerable given the documents."
     - Do not invent facts or use outside knowledge.
     - Keep answers under 5 short paragraphs unless the question requires detail.
