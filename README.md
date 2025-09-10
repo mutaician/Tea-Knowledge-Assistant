@@ -51,7 +51,7 @@ Because the knowledge is scattered across Wikipedia pages and government publica
 1. **Clone the repository**
    ```bash
    git clone https://github.com/mutaician/Tea-Knowledge-Assistant
-   cd tea-knowledge-assistant
+   cd Tea-Knowledge-Assistant
    ```
 
 2. **Install dependencies using uv**
@@ -93,7 +93,7 @@ tea-knowledge-assistant/
 ├── code/
 │   ├── main.py              # Main application entry point
 │   ├── ingest.py            # Document ingestion pipeline
-│   ├── prompt_bulder.py     # Prompt construction utilities
+│   ├── prompt_builder.py     # Prompt construction utilities
 │   ├── utils.py             # Helper functions (PDF loading, YAML parsing)
 │   ├── paths.py             # Directory path constants
 │   ├── checktokens.py       # Token usage analysis
@@ -144,7 +144,15 @@ The assistant uses YAML-based prompt templates located in `code/config/prompt_co
 3. Make your changes and test thoroughly
 4. Submit a pull request with a clear description
 
+## License & Data Usage
 
+This project combines publicly available content from multiple sources:
+
+**Wikipedia articles** (e.g., Tea, Tea production in Kenya) are used under the terms of the Creative Commons Attribution-ShareAlike 4.0 International License. Attribution is preserved as required.
+
+**Tea Board of Kenya publications** (e.g., cultivation manuals, quality requirement notices, regulations) are included for educational and research purposes only. These documents are © Tea Board of Kenya unless otherwise stated. Redistribution or commercial use may require prior permission from the Tea Board.
+
+**The code for this project is licensed under the MIT License**, unless specified otherwise.
 
 ## Acknowledgments
 

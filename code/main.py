@@ -3,7 +3,7 @@ from typing import List
 import chromadb
 from dotenv import load_dotenv
 from paths import VECTOR_DB_DIR, PROMPT_CONFIG_FPATH
-from prompt_bulder import build_prompt_from_config
+from prompt_builder import build_prompt_from_config
 from langchain_openai import OpenAIEmbeddings, ChatOpenAI
 from utils import load_yaml_config
 
