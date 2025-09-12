@@ -68,10 +68,13 @@ def retrieve_relevant_documents(
     return docs
 
 
-def respond_to_query(query, prompt_config, n_results=5, threshold=0.7):
+def respond_to_query(query, prompt_config, n_results=5, threshold=0.7, documents=None):
 
-    relevant_documents = retrieve_relevant_documents(query, n_results, threshold)
-    
+    if documents is not None:
+        relevant_documents = documents
+    else:
+        relevant_documents = retrieve_relevant_documents(query, n_results, threshold)
+
     print("Relevant documents: \n")
     for doc in relevant_documents:
         print(doc)

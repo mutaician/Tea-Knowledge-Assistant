@@ -19,7 +19,7 @@ For researchers/policy makers: a consolidated, conversational entry point into s
 
 Because the knowledge is scattered across Wikipedia pages and government publications, a retrieval-based system ensures answers are grounded in the most relevant text chunks, reducing noise and making critical guidance more discoverable.
 
-## 🛠️ Technical Architecture
+## Technical Architecture
 
 ### Core Components
 - **Document Ingestion**: PDF processing and text chunking using LangChain
@@ -65,35 +65,39 @@ Because the knowledge is scattered across Wikipedia pages and government publica
    OPENAI_API_KEY=your_openai_api_key_here
    ```
 
-### Data Preparation
+### Usage
 
-**Ingest documents** into the vector database:
+**Launch the web interface:**
+```bash
+uv run streamlit run streamlit_app.py
+```
+
+The web interface provides:
+- Visual setup guide with status indicators
+- One-click document processing with progress tracking
+- Interactive Q&A with source document previews
+- Real-time status updates and error handling
+
+**Alternative: Command-line interface**
+Ingest documents into the vector database:
    ```bash
    uv run code/ingest.py
    ```
-
-### Usage
-
-**Start the interactive assistant:**
+Start interactive assistant
 ```bash
 uv run code/main.py
 ```
 
-**Example interaction:**
-```
-Welcome to Tea Knowledge Assistant that will answer any of your tea questions with high accuracy
-(type 'exit' to quit)
-Enter Question: What are the optimal conditions for tea cultivation in Kenya?
-```
 
 ## Project Structure
 
 ```
 tea-knowledge-assistant/
+├── streamlit_app.py          # Web interface for the RAG system
 ├── code/
 │   ├── main.py              # Main application entry point
 │   ├── ingest.py            # Document ingestion pipeline
-│   ├── prompt_builder.py     # Prompt construction utilities
+│   ├── prompt_builder.py    # Prompt construction utilities
 │   ├── utils.py             # Helper functions (PDF loading, YAML parsing)
 │   ├── paths.py             # Directory path constants
 │   ├── checktokens.py       # Token usage analysis
@@ -123,12 +127,10 @@ The assistant uses YAML-based prompt templates located in `code/config/prompt_co
 - **Embedding model**: OpenAI text-embedding-3-small
 - **Search space**: Cosine similarity
 
+## Web Interface
 
-
-### Adding New Documents
-1. Place new PDF files in the `data/` directory
-2. Run the ingestion script: `uv run code/ingest.py`
-3. The new documents will be automatically chunked and embedded
+A Streamlit-based web interface is available for interactive use
+The web interface provides a visual interface for document processing and question answering.
 
 ## Performance Considerations
 

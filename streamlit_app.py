@@ -9,10 +9,15 @@ sys.path.append(str(Path(__file__).parent / "code"))
 # Import project modules
 try:
     from ingest import main as ingest_main
+    from main import respond_to_query, retrieve_relevant_documents
+    from utils import load_yaml_config
+    from paths import PROMPT_CONFIG_FPATH
     INGEST_AVAILABLE = True
-except ImportError:
+    MAIN_AVAILABLE = True
+except ImportError as e:
     INGEST_AVAILABLE = False
-    st.error("Could not import ingestion module. Please check the code directory.")
+    MAIN_AVAILABLE = False
+    st.error(f"Could not import required modules: {e}. Please check the code directory.")
 
 # Page configuration
 st.set_page_config(
@@ -128,6 +133,72 @@ def process_documents():
         st.error(f"Error during document processing: {str(e)}")
         return False
 
+def qa_interface():
+    """Q&A interface for asking questions about tea"""
+    if not MAIN_AVAILABLE:
+        st.error("Q&A functionality not available")
+        return
+
+    # Load prompt config
+    try:
+        prompt_config = load_yaml_config(PROMPT_CONFIG_FPATH)
+        rag_prompt = prompt_config["rag_assistant_prompt"]
+    except Exception as e:
+        st.error(f"Could not load prompt configuration: {e}")
+        return
+
+    st.markdown("### 💬 Ask a Question")
+    st.markdown("Ask any question about tea cultivation, processing, or related topics!")
+
+    # Question input
+    question = st.text_input(
+        "Your question:",
+        placeholder="e.g., What are the optimal conditions for tea cultivation in Kenya?",
+        key="question_input"
+    )
+
+    # Submit button
+    if st.button("🔍 Get Answer", type="primary") and question.strip():
+        try:
+            with st.spinner("Searching documents and generating answer..."):
+                # Get relevant documents (only once)
+                relevant_docs = retrieve_relevant_documents(question, top_k=3, threshold=0.6)
+
+                # Generate response using the retrieved documents (no double retrieval)
+                response = respond_to_query(question, rag_prompt, n_results=3, threshold=0.6, documents=relevant_docs)
+
+            # Display results
+            st.markdown("---")
+
+            # Show retrieved documents
+            if relevant_docs:
+                st.markdown("### 📄 Relevant Information Found")
+                with st.expander("View source documents", expanded=False):
+                    for i, doc in enumerate(relevant_docs, 1):
+                        st.markdown(f"**Document {i}:**")
+                        # Show first 500 characters of each document
+                        preview = doc[:500] + "..." if len(doc) > 500 else doc
+                        st.text_area(f"Document {i} preview", preview, height=100, disabled=True)
+            else:
+                st.warning("No relevant documents found for this question.")
+
+            # Show AI answer
+            st.markdown("### 🤖 Answer")
+            st.markdown(str(response))
+
+        except Exception as e:
+            st.error("❌ Failed to process your question")
+            with st.expander("Error Details", expanded=False):
+                st.code(f"Error: {str(e)}")
+            st.info("💡 **Troubleshooting tips:**\n"
+                   "• Check your OpenAI API key is valid\n"
+                   "• Ensure documents are properly processed\n"
+                   "• Try refreshing the page\n"
+                   "• Check your internet connection")
+
+    elif not question.strip() and st.session_state.get('question_input', '').strip():
+        st.info("Please enter a question to get started!")
+
 # Main content
 st.markdown('<h1 class="main-header">🍵 Tea Knowledge Assistant</h1>', unsafe_allow_html=True)
 st.markdown('<p class="subtitle">Your AI-powered guide to tea cultivation, processing, and knowledge</p>', unsafe_allow_html=True)
@@ -181,10 +252,11 @@ all_ready = status['api_key'] and status['vector_db']
 
 if all_ready:
     st.markdown("---")
-    st.markdown("### 🎯 Ready to Start!")
+    st.markdown("### 🎯 Ready to Ask Questions!")
     st.success("All systems are ready! You can now ask questions about tea.")
-    if st.button("🚀 Continue to Q&A", type="primary"):
-        st.info("Q&A interface will be implemented in the next step!")
+
+    # Q&A Interface
+    qa_interface()
 
 elif status['api_key'] and not status['vector_db']:
     st.markdown("---")
@@ -219,4 +291,5 @@ else:
 
 # Footer
 st.markdown("---")
-st.markdown("*Built with Streamlit and powered by RAG technology*")
+st.markdown("🍵 **Tea Knowledge Assistant** | Built with Streamlit & RAG Technology")
+st.markdown("*Demonstrating retrieval-augmented generation for agricultural knowledge*")
