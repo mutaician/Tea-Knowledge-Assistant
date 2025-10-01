@@ -54,13 +54,18 @@ Because the knowledge is scattered across Wikipedia pages and government publica
    cd Tea-Knowledge-Assistant
    ```
 
-2. **Install dependencies using uv**
+2. **Activate environment and Install dependencies using uv**
    ```bash
+   uv venv
+   # On Windows
+   .\venv\Scripts\activate
+   # On macOS/Linux
+   source venv/bin/activate
    uv sync
    ```
 
 3. **Set up environment variables**
-   Create a `.env` file in the project root:
+   Rename the file `.env.example` to `.env` enter your api_key
    ```env
    OPENAI_API_KEY=your_openai_api_key_here
    ```

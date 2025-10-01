@@ -1,8 +1,10 @@
 import os
 from langchain_community.document_loaders import PyPDFDirectoryLoader
-
-# You need to install: tiktoken, langchain-community
 import tiktoken
+
+"""
+Code to estimate the cost of embedding documents
+"""
 
 ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA_DIR = os.path.join(ROOT_DIR, "data")
